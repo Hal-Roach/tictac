@@ -1,0 +1,147 @@
+package com.example.hal.tictactoe;
+
+import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
+
+  Created by Hal on 2014-10-29.
+ 
+public class TicTac implements Parcelable {
+     variables for all inputs, answers, winlose and count
+
+    private boolean winPlayer;
+    private boolean winComp;
+    private boolean nextGuessPlayer;
+    private String winString;
+    private ArrayListInteger numList;
+    private ArrayListInteger playerGuessList;
+    private ArrayListInteger compGuessList;
+    private Context myContext;
+
+    public TicTac(Context context) {
+         construct the lists for use in this class
+        myContext = context;
+        numList = new ArrayListInteger();
+        playerGuessList = new ArrayListInteger();
+        compGuessList = new ArrayListInteger();
+        newGame();
+    }
+     fill the array with 0-8 to represent the game spaces, then shuffle to randomize the index
+    private void makeArrayNShuffle(){
+        for (int i = 0; i  9; i++) {
+            numList.add(i);
+        }
+        Collections.shuffle(numList);
+    }
+         new game sub to reset and initialize upon reset or first load
+    public void newGame() {
+        winPlayer = false;
+        winComp = false;
+        nextGuessPlayer = true;
+        winString = ;
+         clear and re-use old array on new game start
+        numList.clear();
+        playerGuessList.clear();
+        compGuessList.clear();
+        makeArrayNShuffle();
+
+
+    }
+        sub to return the index of a particular number in the arraylist
+    private int getIndex(int number) {
+        return numList.indexOf(number);
+    }
+
+    public int compGuess(){
+        int numToRemove = 0;
+        int random = 0;
+         shuffle the remaining positions array to ensure random pick
+        Collections.shuffle(numList);
+         make random var equal to the first value in the shuffled array(to be returned as comp guess)
+        random = numList.get(0);
+         make numToRemove var equal to the index of random var in the array for removal of comp guess
+        numToRemove = getIndex(random);
+         remove the comp guess from the remaining positions array
+        numList.remove(numToRemove);
+         add the value to the playerGuess array
+        compGuessList.add(random);
+        isWinComputer();
+        return random;
+    }
+
+    public void playerGuess(int guessPosition) {
+        int numToRemove = 0;
+         make numToRemove var equal to the index of the passed position from player move
+        numToRemove = getIndex(guessPosition);
+         remove the value from the available positions array based on the index in the array
+        numList.remove(numToRemove);
+         add the value to the playerGuess array
+        playerGuessList.add(guessPosition);
+        isWinPlayer();
+
+    }
+    player and computer win booleans gets
+    public boolean getWinPlayer(){
+        return winPlayer;
+    }
+    public boolean getWinComp(){
+        return winComp;
+    }
+        check the player array list against all the possible win scenarios
+    public void isWinPlayer(){
+
+        if ((playerGuessList.contains(0)) && (playerGuessList.contains(1)) && (playerGuessList.contains(2))
+                 ((playerGuessList.contains(3)) && (playerGuessList.contains(4)) && (playerGuessList.contains(5)))
+                 ((playerGuessList.contains(6)) && (playerGuessList.contains(7)) && (playerGuessList.contains(8)))
+                 ((playerGuessList.contains(0)) && (playerGuessList.contains(3)) && (playerGuessList.contains(6)))
+                 ((playerGuessList.contains(1)) && (playerGuessList.contains(4)) && (playerGuessList.contains(7)))
+                 ((playerGuessList.contains(2)) && (playerGuessList.contains(5)) && (playerGuessList.contains(8)))
+                 ((playerGuessList.contains(0)) && (playerGuessList.contains(4)) && (playerGuessList.contains(8)))
+                 ((playerGuessList.contains(6)) && (playerGuessList.contains(4)) && (playerGuessList.contains(2)))){
+            winPlayer = true;
+            winString = (myContext.getResources().getString(R.string.youWin));
+        }
+    }
+    check the computer array list against all the possible win scenarios
+    public void isWinComputer(){
+        if ((compGuessList.contains(0)) && (compGuessList.contains(1)) && (compGuessList.contains(2))
+                 ((compGuessList.contains(3)) && (compGuessList.contains(4)) && (compGuessList.contains(5)))
+                 ((compGuessList.contains(6)) && (compGuessList.contains(7)) && (compGuessList.contains(8)))
+                 ((compGuessList.contains(0)) && (compGuessList.contains(3)) && (compGuessList.contains(6)))
+                 ((compGuessList.contains(1)) && (compGuessList.contains(4)) && (compGuessList.contains(7)))
+                 ((compGuessList.contains(2)) && (compGuessList.contains(5)) && (compGuessList.contains(8)))
+                 ((compGuessList.contains(0)) && (compGuessList.contains(4)) && (compGuessList.contains(8)))
+                 ((compGuessList.contains(6)) && (compGuessList.contains(4)) && (compGuessList.contains(2)))){
+            winComp = true;
+            winString = (myContext.getResources().getString(R.string.compWin));
+        }
+    }
+     check to confirm there is an available space for the computer or player to make next move
+    public boolean nextGuessCheckPlayer() {
+       if (numList.size() = 1){
+           nextGuessPlayer = true;
+       }    else    {
+           nextGuessPlayer = false;
+       }
+        return nextGuessPlayer;
+    }
+
+         string to hold win message and return
+    public String getWinString(){
+        return winString;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+
+    }
+}
